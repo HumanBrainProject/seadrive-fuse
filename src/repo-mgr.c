@@ -36,6 +36,7 @@ struct _SeafRepoManagerPriv {
     GHashTable *user_perms;     /* repo_id -> folder user perms */
     GHashTable *group_perms;    /* repo_id -> folder group perms */
     pthread_mutex_t perm_lock;
+    char *default_repo;
 };
 
 static SeafRepo *
@@ -2789,6 +2790,13 @@ seaf_repo_manager_set_current_account_all_repos_loaded (SeafRepoManager *mgr)
     pthread_rwlock_unlock (&mgr->priv->account_lock);
 }
 
+void
+seaf_repo_manager_set_default_repo (SeafRepoManager *mgr, char *default_repo)
+{
+    g_free(mgr->priv->default_repo);
+    mgr->priv->default_repo = g_strdup(default_repo);
+}
+
 int
 seaf_repo_manager_update_current_account (SeafRepoManager *mgr,
                                           const char *server,
@@ -3060,6 +3068,12 @@ seaf_repo_manager_get_repo_display_name (SeafRepoManager *mgr,
     pthread_rwlock_unlock (&mgr->priv->account_lock);
 
     return display_name;
+}
+
+char *
+seaf_repo_manager_get_default_repo (SeafRepoManager *mgr)
+{
+    return mgr->priv->default_repo;
 }
 
 static char *

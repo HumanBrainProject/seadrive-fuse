@@ -215,6 +215,9 @@ out:
 #define CACHE_SIZE_LIMIT "size_limit"
 #define CLEAN_CACHE_INTERVAL "clean_cache_interval"
 
+#define REPO_GROUP "repo"
+#define DEFAULT_REPO "default_repo"
+
 static gint64
 convert_size_str (const char *size_str)
 {
@@ -266,6 +269,7 @@ load_config_from_file (const char *config_file)
     char *cache_size_limit_str = NULL;
     gint64 cache_size_limit;
     int clean_cache_interval;
+    char *default_repo = NULL;
 
     full_config_file = ccnet_expand_path (config_file);
 
@@ -344,12 +348,19 @@ load_config_from_file (const char *config_file)
     }
     g_clear_error (&error);
 
+    default_repo = g_key_file_get_string (key_file, REPO_GROUP, DEFAULT_REPO, &error);
+    if (!error) {
+        seaf_repo_manager_set_default_repo(seaf->repo_mgr, default_repo);
+    }
+    g_clear_error (&error);
+
     g_free (client_name);
     g_free (proxy_type);
     g_free (proxy_addr);
     g_free (proxy_username);
     g_free (proxy_password);
     g_free (cache_size_limit_str);
+    g_free (default_repo);
     g_free (full_config_file);
     g_key_file_free (key_file);
 }

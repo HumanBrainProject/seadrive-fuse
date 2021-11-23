@@ -377,6 +377,9 @@ char *
 seaf_repo_manager_get_repo_display_name (SeafRepoManager *mgr,
                                          const char *id);
 
+char *
+seaf_repo_manager_get_default_repo (SeafRepoManager *mgr);
+
 int
 seaf_repo_manager_set_if_current_repo_unsyncable (SeafRepoManager *mgr,
                                                   const char *repo_id,
@@ -422,6 +425,9 @@ seaf_repo_manager_set_current_repo_list_fetched (SeafRepoManager *mgr);
 
 void
 seaf_repo_manager_set_current_account_all_repos_loaded (SeafRepoManager *mgr);
+
+void
+seaf_repo_manager_set_default_repo (SeafRepoManager *mgr, char *default_repo);
 
 struct _SeafAccountSpace {
     gint64 total;

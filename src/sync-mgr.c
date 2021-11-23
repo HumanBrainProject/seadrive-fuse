@@ -1512,10 +1512,19 @@ check_http_protocol (SeafSyncManager *mgr, const char *server_url)
 }
 
 gint
-cmp_sync_info_by_sync_time (gconstpointer a, gconstpointer b, gpointer user_data)
+cmp_sync_info_by_sync_time (gconstpointer a, gconstpointer b, gpointer default_repo)
 {
     const SyncInfo *info_a = a;
     const SyncInfo *info_b = b;
+
+    if (default_repo != NULL) { // make sure default repo is first
+        if (strcmp(info_a->repo_info->name, default_repo) == 0) {
+            return -1;
+        }
+        if (strcmp(info_b->repo_info->name, default_repo) == 0) {
+            return 1;
+        }
+    }
 
     return (info_a->last_sync_time - info_b->last_sync_time);
 }
@@ -1640,7 +1649,7 @@ auto_sync_pulse (void *vmanager)
     /* Sort sync_infos by last_sync_time, so that we don't "starve" any repo. */
     sync_info_list = g_list_sort_with_data (sync_info_list,
                                             cmp_sync_info_by_sync_time,
-                                            NULL);
+                                            seaf_repo_manager_get_default_repo(seaf->repo_mgr));
 
     for (ptr = sync_info_list; ptr != NULL; ptr = ptr->next) {
         sync_info = (SyncInfo *)ptr->data;
