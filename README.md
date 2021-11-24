@@ -1,5 +1,15 @@
 # seadrive-fuse
-SeaDrive daemon with FUSE interface
+Fork of SeaDrive daemon with FUSE interface with custom config options
+
+# Additional Config options
+## Default Repo
+The default repo will be initialized and synchronized first. This can be useful when using the daemon in an application where there is a specific repo that is referenced and startup time is important
+
+The config option can be set in the existing config file under:
+```
+[repo]
+default_repo=Repo name goes here
+```
 
 # Building
 ## Ubuntu Linux
